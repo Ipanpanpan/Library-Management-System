@@ -1,0 +1,27 @@
+# depslib dependency file v1.0
+1733125436 source:c:\users\ivan nathanael\uni\dsa\project\books\bookimport.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<string>
+	<vector>
+
+1733125823 source:c:\users\ivan nathanael\uni\dsa\project\books\main.cpp
+	<iostream>
+	<vector>
+	"BookImport.h"
+
+1733127312 c:\users\ivan nathanael\uni\dsa\project\books\bookimport.h
+	<vector>
+	<string>
+	"BookImport.h"
+
+1733126616 source:c:\users\ivan nathanael\uni\dsa\project\books\transaction.cpp
+	"Transaction.h"
+	<sstream>
+	<iomanip>
+
+1733127283 c:\users\ivan nathanael\uni\dsa\project\books\transaction.h
+	<string>
+	<vector>
+
