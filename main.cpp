@@ -12,6 +12,6 @@ int main() {
     for (const auto& book : books) {
         book.displayBookInfo();
     }
-
+    cout << "halo" << endl;
     return 0;
 }
