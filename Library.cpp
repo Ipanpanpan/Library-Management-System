@@ -38,7 +38,7 @@ Account& Library::get_account(std::string username, std::string password) {
 }
 
 
-//Add
+//Adding
 void Library::add_accounts(std::string username, std::string password, std::string acc_type) {
     if (!is_account_exist(username))
         throw invalid_argument("username already exist");
@@ -59,14 +59,31 @@ void Library::add_accounts(std::string username, std::string password, std::stri
 void Library::add_books(std::string ISBN, std::string book_name, std::string author, int quantity, int year_publish){
     Book book = Book(book_name, author, ISBN, quantity, year_publish);
 
-    if (!is_book_exist(ISBN))
-        throw invalid_argument("Book already exist");
+    if (books.size() == 0)
+        books.push_back(book);
+
+    else if (books[books.size() - 1] < ISBN)
+        books.push_back(book);
+
+    else if (books[0] > ISBN)
+        books.insert(books.begin(), book);
 
     //search the index to fit book
-    int index;
-    int low = 0;
-    int high = books.size()-1;
-    while !(books[index - 1].ISBN.compare(ISBN)
+    else{
+        int index;
+        int low = 0;
+        int high = books.size()-1;
+        while (!(books[index - 1].ISBN < ISBN && ISBN < books[index].ISBN)){
+            index = (low + high) / 2;
+            if (books[index].ISBN > ISBN)
+                high = index;
+            else if (books[index].ISBN < ISBN)
+                low = index;
+            else
+                throw invalid_argument("Book already exist");
+        }
+        books.insert(books.begin() + index, book);
+    }
 }
 
 
@@ -80,14 +97,77 @@ void Library::add_transactions(std::string ISBN, std::string username) {
     transactions.push_back(transaction);
 }
 
+//Edit
+void Library::edit_book(std::string ISBN, std::string book_name = NULL, std::string author = NULL,
+                        int quantity = NULL, int year_publish = NULL){
+
+}
+
+
+//Remove
+void Library::remove_account(string username){
+    for (int i = 0; i < accounts.size(); i++){
+        if (accounts[i].username == username){
+            accounts.erase(accounts.begin() + i);
+            return;
+        }
+    }
+    throw invalid_argument("Username not found");
+}
+
+
+void Library::remove_book(string ISBN){
+    int low = 0;
+    int high = books.size() -1;
+    int mid;
+    while (low <= high){
+        mid = (low + high) / 2;
+        if (books[mid].ISBN == ISBN){
+            books.erase(books.begin() + mid);
+            return;
+        }
+        else if (books[mid].ISBN < ISBN)
+            low = mid;
+        else
+            high = mid;
+    }
+    throw invalid_argument("Book not found");
+}
+
+void Library::remove_transaction_record(int transaction_id) {
+    int low = 0;
+    int high = transactions.size() - 1;
+    int mid;
+    while (low <= high){
+        mid = (low + high) / 2;
+        if (transactions[mid].transaction_id == transaction_id){
+            transactions.erase(transactions.begin() + mid);
+            return;
+        }
+        else if (transactions[mid].transaction_id < transaction_id)
+            low = mid;
+        else
+            high = mid;
+    }
+    throw invalid_argument("Transaction not found");
+}
+
 //Checking
 bool Library::is_book_exist(string ISBN) const {
-    for(int i = 0; i < books.size(); i++) {
-        Book ith_book = books[i];
-        if (ith_book.ISBN == ith_book.ISBN)
+    int low = 0;
+    int high = books.size() -1;
+    int mid;
+    while (low <= high){
+        mid = (low + high) / 2;
+        if (books[mid].ISBN == ISBN){
             return true;
+        }
+        else if (books[mid].ISBN < ISBN)
+            low = mid;
+        else
+            high = mid;
     }
-    return false;
+    throw false;
 }
 
 bool Library::is_account_exist(string username) const {
