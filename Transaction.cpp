@@ -6,10 +6,10 @@
 using namespace std;
 
 // Constructor to initialize a transaction
-Transaction::Transaction(int trans_id, int book_id, int borrower_id) {
+Transaction::Transaction(int trans_id, string isbn, string username); {
     this->transaction_id = trans_id;  // Set unique transaction ID
-    this->book_id = book_id;          // Set the book ID
-    this->borrower_id = borrower_id;  // Set the borrower ID (can be user_id)
+    this->isbn = isbn;          // Set the book ID
+    this->username = username;  // Set the borrower ID (can be user_id)
     this->borrow_date = getCurrentDateTime();  // Record current date and time as borrow date
 }
 
@@ -32,8 +32,8 @@ string Transaction::getCurrentDateTime() const {
 // Function to display transaction details
 void Transaction::displayTransactionInfo() const {
     cout << "Transaction ID: " << transaction_id << endl;
-    cout << "Borrower ID: " << borrower_id << endl;
-    cout << "Book ID: " << book_id << endl;
+    cout << "Borrower Username: " << borrower_id << endl;
+    cout << "Book ISBN: " << book_id << endl;
     cout << "Transaction Date & Time: " << borrow_date << endl;
     cout << "----------------------------" << endl;
 }
