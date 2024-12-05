@@ -12,36 +12,50 @@ public:
     friend class Admin;
 
     //Constructor
-    Library(string book_data_path_ = "books_info.csv", string account_data_path_ = "account_data.csv");
+    Library(std::string book_data_path_ = "books_info.csv", std::string account_data_path_ = "account_data.csv");
 
     //Getter
-    vector<Account> get_accounts() const;
-    vector<Book> get_books() const;
-    vector<Transaction> get_transactions() const;
+    std::vector<Account*> get_accounts();
+    std::vector<Book> get_books() const;
+    std::vector<Transaction> get_transactions() const;
+    Account& get_account(std::string username, std::string password);
 
-    void add_account(string username, string password, string acc_type = "user");
-    void add_book(string ISBM, string book_name, string author, int quantity, int year_publish);
-    void add_transaction(Transaction transaction);
+
+    void add_accounts(std::string username, std::string password, std::string acc_type);
+    void add_books(std::string ISBN, std::string book_name, std::string author, int quantity, int year_publish);
+    void add_transactions(std::string ISBN, std::string username);
+
+
 
 
 private:
     //Private Function
-    void remove_account(int account_id);
-    void remove_book(string ISBN);
+    void remove_account(std::string username);
+    void remove_book(std::string ISBN);
     void remove_transaction_record(int transaction_id);
 
-    void edit_book(string ISBN, string book_name = NULL, string author = NULL, int quantity = NULL, int year_publish = NULL);
+    void edit_book(std::string ISBN, std::string book_name = NULL, std::string author = NULL, int quantity = NULL, int year_publish = NULL);
+
+    //Checking
+    bool is_book_exist(std::string ISBN) const;
+    bool is_account_exist(std::string username) const;
+
 
     //File Import
-    void importAccountFromCSV(string file_path);
+    void importAccountFromCSV(std::string file_path);
+    void importTransactionFromCSV(std::string file_path);
+    vector<string> split(const std::string& line, char delimiter = ',');
+
+
+
 
     //Class Attributes
-    vector<Account> accounts;
-    vector<Book> books;
-    vector<Transaction> transactions;
+    std::vector<Account*> accounts;
+    std::vector<Book> books;
+    std::vector<Transaction> transactions;
     //data path
-    string book_data_path;
-    string account_data_path;
+    std::string book_data_path;
+    std::string account_data_path;
 
 };
 
