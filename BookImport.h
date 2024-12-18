@@ -1,32 +1,24 @@
-#ifndef BOOK_IMPORT_H
-#define BOOK_IMPORT_H
+#ifndef BOOKIMPORT_H
+#define BOOKIMPORT_H
 
 #include <string>
 #include <vector>
-
+#include <iostream> // Make sure iostream is included
 using namespace std;
-
 class Book {
 public:
-    string ID;           // Renamed from ISBN to ID
-    string title;        // Renamed from book_name to title
+    string ID;
+    string title;
     string author;
-    string category;     // Added category attribute
-    int quantity;
+    string category;
+    bool availability;
     int year_publish;
-    bool availability;   // Added availability attribute
 
-    // Constructor to initialize a Book object
-    // Updated to include category and initialize availability
-    Book(string id, string title, string author, string category, int qty, int year);
+    Book(string id, string title, string author, string category, bool availability, int year); // Modified constructor
 
-    // Method to display book details
-    // Updated to display category and availability
     void displayBookInfo() const;
 };
 
-// Function to parse CSV and populate the list of Book objects
-// Updated to handle category in CSV
 vector<Book> importBooksFromCSV(const string& filename);
 
 #endif
