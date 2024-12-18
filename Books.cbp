@@ -34,6 +34,7 @@
 		</Compiler>
 		<Unit filename="Account.cpp" />
 		<Unit filename="Account.h" />
+		<Unit filename="Admin.cpp" />
 		<Unit filename="Admin.h" />
 		<Unit filename="BookImport.cpp" />
 		<Unit filename="BookImport.h" />
