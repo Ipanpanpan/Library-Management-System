@@ -5,18 +5,21 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+//#include "Library.h"
+
+class Library;
 
 class Account{
 
-private:
+protected:
     //Attributes
     std::string username;
     std::string password;
     std::string personalInfo;
-
+    Library* library;
 public:
     //Constructor
-    Account(const std::string& user, const std::string& pass);
+    Account(const std::string& user, const std::string& pass, Library& lib);
 
     //Getters and Setter
     std::string getUsername() const;
