@@ -19,10 +19,6 @@ void Book::displayBookInfo() const {
     cout << "Available: " << (availability ? "Yes" : "No") << endl;
 }
 
-// Overloaded < operator for sorting by ID
-bool Book::operator<(const Book& other) const {
-    return ID < other.ID;
-}
 
 // Function to parse CSV and populate the list of Book objects
 vector<Book> importBooksFromCSV(const string& filename) {
@@ -104,4 +100,14 @@ vector<Book> importBooksFromCSV(const string& filename) {
 
     file.close();
     return books;
+}
+
+//Ini buat compare_book_by_id ya bel yak ada
+bool compare_book_by_id(const Book& l, const Book& r){
+    return l.ID < r.ID;
+}
+
+//Ini buat compare_book_by_title ya bel yak ada
+bool compare_book_by_title(const Book& l, const Book& r){
+    return l.title < r.title;
 }
