@@ -5,9 +5,8 @@
 #include <exception>
 
 // Constructor implementation
-Book::Book(string id, string title, string author, string category, int qty, int year)
-    : ID(id), title(title), author(author), category(category), quantity(qty), year_publish(year) {
-    availability = (quantity > 0); // Initialize availability based on quantity
+Book::Book(string id, string title, string author, string category, bool availability, int year)
+    : ID(id), title(title), author(author), category(category), availability(availability), year_publish(year) {
 }
 
 // Method to display book details
@@ -15,11 +14,11 @@ void Book::displayBookInfo() const {
     cout << "ID: " << ID << endl;
     cout << "Title: " << title << endl;
     cout << "Author: " << author << endl;
-    cout << "Category: " << category << endl;         // Display category
-    cout << "Quantity: " << quantity << endl;
+    cout << "Category: " << category << endl;
     cout << "Year Published: " << year_publish << endl;
-    cout << "Available: " << (availability ? "Yes" : "No") << endl; // Display availability
+    cout << "Available: " << (availability ? "Yes" : "No") << endl;
 }
+
 
 // Function to parse CSV and populate the list of Book objects
 vector<Book> importBooksFromCSV(const string& filename) {
@@ -40,9 +39,9 @@ vector<Book> importBooksFromCSV(const string& filename) {
 
         if (line.empty()) continue; // Skip empty lines
         stringstream ss(line);
-        string id, title, author, category, qty_str, year_str;
+        string id, title, author, category, availability_str, year_str;
 
-        // CSV format: ID,Title,Author,Category,Quantity,Year Published
+        // CSV format: ID,Title,Author,Category,Availability,Year Published
         if (!getline(ss, id, ',')) {
             cerr << "Warning: Missing ID in line: " << line << endl;
             continue;
@@ -59,15 +58,14 @@ vector<Book> importBooksFromCSV(const string& filename) {
             cerr << "Warning: Missing Category in line: " << line << endl;
             continue;
         }
-        if (!getline(ss, qty_str, ',')) {
-            cerr << "Warning: Missing Quantity in line: " << line << endl;
+        if (!getline(ss, availability_str, ',')) {
+             cerr << "Warning: Missing Availability in line: " << line << endl;
             continue;
         }
-        if (!getline(ss, year_str, ',')) {
+           if (!getline(ss, year_str, ',')) {
             cerr << "Warning: Missing Year Published in line: " << line << endl;
             continue;
         }
-
         // Trim whitespace from extracted strings (optional but recommended)
         auto trim = [](string& s) {
             size_t start = s.find_first_not_of(" \t\r\n");
@@ -82,25 +80,34 @@ vector<Book> importBooksFromCSV(const string& filename) {
         trim(title);
         trim(author);
         trim(category);
-        trim(qty_str);
-        trim(year_str);
-
-        // Convert Quantity and Year Published to integers
-        int quantity;
+        trim(availability_str);
+          trim(year_str);
+        // Convert Availability and Year Published to respective types
+        bool availability;
         int year_publish;
         try {
-            quantity = stoi(qty_str);
-            year_publish = stoi(year_str);
+           availability = (availability_str == "1"); // Convert "1" to true, "0" to false
+           year_publish = stoi(year_str);
         }
-        catch (const invalid_argument& e) {
-            cerr << "Warning: Invalid number format in line: " << line << endl;
+         catch (const invalid_argument& e) {
+            cerr << "Warning: Invalid number or format in line: " << line << endl;
             continue; // Skip invalid lines
         }
 
         // Create and add the Book object
-        books.emplace_back(id, title, author, category, quantity, year_publish);
+        books.emplace_back(id, title, author, category, availability, year_publish);
     }
 
     file.close();
     return books;
+}
+
+//Ini buat compare_book_by_id ya bel yak ada
+bool compare_book_by_id(const Book& l, const Book& r){
+    return l.ID < r.ID;
+}
+
+//Ini buat compare_book_by_title ya bel yak ada
+bool compare_book_by_title(const Book& l, const Book& r){
+    return l.title < r.title;
 }

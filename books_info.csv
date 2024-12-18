@@ -1,49 +1,49 @@
-ID,Title,Author,Category,Quantity,Year Published
-9780743273565,The Great Gatsby,F. Scott Fitzgerald,Fiction,5,1925
-9780451524935,1984,George Orwell,Dystopian,10,1949
-9780060935467,To Kill a Mockingbird,Harper Lee,Fiction,8,1960
-9780141040349,Pride and Prejudice,Jane Austen,Romance,4,1813
-9781851244422,Moby Dick,Herman Melville,Adventure,3,1851
-9781400079988,War and Peace,Leo Tolstoy,Historical Fiction,6,1869
-9780316769488,The Catcher in the Rye,J.D. Salinger,Fiction,7,1951
-9780618640157,The Lord of the Rings,J.R.R. Tolkien,Fantasy,12,1954
-9780345339683,The Hobbit,J.R.R. Tolkien,Fantasy,15,1937
-9780590353427,Harry Potter and the Sorcerer's Stone,J.K. Rowling,Fantasy,20,1997
-9780140268867,The Odyssey,Homer,Classic,4,-800
-9780062315007,The Alchemist,Paulo Coelho,Adventure,10,1988
-9780060850524,Brave New World,Aldous Huxley,Dystopian,6,1932
-9780141439570,The Picture of Dorian Gray,Oscar Wilde,Gothic Fiction,5,1890
-9780385121675,The Shining,Stephen King,Horror,8,1977
-9780066238500,The Chronicles of Narnia,C.S. Lewis,Fantasy,10,1950
-9781451673319,Fahrenheit 451,Ray Bradbury,Dystopian,7,1953
-9780060652951,The Great Divorce,C.S. Lewis,Fiction,3,1945
-9780486415871,Crime and Punishment,Fyodor Dostoevsky,Psychological Fiction,9,1866
-9780141441146,Jane Eyre,Charlotte Brontë,Romance,5,1847
-9780060837020,The Bell Jar,Sylvia Plath,Fiction,6,1963
-9780439023528,The Hunger Games,Suzanne Collins,Dystopian,15,2008
-9781594633669,The Girl on the Train,Paula Hawkins,Mystery,12,2015
-9781451626650,Catch-22,Joseph Heller,Satire,10,1961
-9781853260391,A Tale of Two Cities,Charles Dickens,Historical Fiction,8,1859
-9781594631931,The Kite Runner,Khaled Hosseini,Fiction,11,2003
-9780307387899,The Road,Cormac McCarthy,Post-apocalyptic,7,2006
-9780375842207,The Book Thief,Markus Zusak,Historical Fiction,6,2005
-9780399501487,Lord of the Flies,William Golding,Allegory,5,1954
-9780525478812,The Fault in Our Stars,John Green,Young Adult,10,2012
-9780440237686,The Giver,Lois Lowry,Dystopian,9,1993
-9780143035008,Anna Karenina,Leo Tolstoy,Romance,4,1878
-9780141439556,Wuthering Heights,Emily Brontë,Gothic Fiction,5,1847
-9780141321060,The Secret Garden,Frances Hodgson Burnett,Children's Fiction,3,1911
-9780142408762,Little Women,Louisa May Alcott,Classic Fiction,6,1868
-9780142407338,The Outsiders,S.E. Hinton,Young Adult,8,1967
-9780743297332,The Sun Also Rises,Ernest Hemingway,Modernist Fiction,10,1926
-9780385333849,Slaughterhouse-Five,Kurt Vonnegut,Science Fiction,6,1969
-9780316769488,The Catcher in the Rye,J.D. Salinger,Fiction,5,1951
-9780060883287,One Hundred Years of Solitude,Gabriel García Márquez,Magical Realism,8,1967
-9780451530783,The Count of Monte Cristo,Alexandre Dumas,Adventure,9,1844
-9780141441030,The War of the Worlds,H.G. Wells,Science Fiction,7,1898
-9780399501487,The Lord of the Flies,William Golding,Allegory,6,1954
-9780385490818,The Handmaid's Tale,Margaret Atwood,Dystopian,11,1985
-9780441013593,Dune,Frank Herbert,Science Fiction,7,1965
-9780486411095,Dracula,Bram Stoker,Horror,5,1897
-9780451530615,The Time Machine,H.G. Wells,Science Fiction,9,1895
-9780743273565,The Great Gatsby,F. Scott Fitzgerald,Fiction,4,1925
+ID,Title,Author,Category,Availability,Year Published
+9780743273565,The Great Gatsby,F. Scott Fitzgerald,Fiction,0,1925
+9780451524935,1984,George Orwell,Dystopian,1,1949
+9780060935467,To Kill a Mockingbird,Harper Lee,Fiction,0,1960
+9780141040349,Pride and Prejudice,Jane Austen,Romance,1,1813
+9781851244422,Moby Dick,Herman Melville,Adventure,0,1851
+9781400079988,War and Peace,Leo Tolstoy,Historical Fiction,1,1869
+9780316769488,The Catcher in the Rye,J.D. Salinger,Fiction,1,1951
+9780618640157,The Lord of the Rings,J.R.R. Tolkien,Fantasy,0,1954
+9780345339683,The Hobbit,J.R.R. Tolkien,Fantasy,1,1937
+9780590353427,Harry Potter and the Sorcerer's Stone,J.K. Rowling,Fantasy,0,1997
+9780140268867,The Odyssey,Homer,Classic,1,-800
+9780062315007,The Alchemist,Paulo Coelho,Adventure,0,1988
+9780060850524,Brave New World,Aldous Huxley,Dystopian,1,1932
+9780141439570,The Picture of Dorian Gray,Oscar Wilde,Gothic Fiction,0,1890
+9780385121675,The Shining,Stephen King,Horror,1,1977
+9780066238500,The Chronicles of Narnia,C.S. Lewis,Fantasy,0,1950
+9781451673319,Fahrenheit 451,Ray Bradbury,Dystopian,1,1953
+9780060652951,The Great Divorce,C.S. Lewis,Fiction,0,1945
+9780486415871,Crime and Punishment,Fyodor Dostoevsky,Psychological Fiction,1,1866
+9780141441146,Jane Eyre,Charlotte Brontë,Romance,0,1847
+9780060837020,The Bell Jar,Sylvia Plath,Fiction,1,1963
+9780439023528,The Hunger Games,Suzanne Collins,Dystopian,0,2008
+9781594633669,The Girl on the Train,Paula Hawkins,Mystery,1,2015
+9781451626650,Catch-22,Joseph Heller,Satire,0,1961
+9781853260391,A Tale of Two Cities,Charles Dickens,Historical Fiction,1,1859
+9781594631931,The Kite Runner,Khaled Hosseini,Fiction,0,2003
+9780307387899,The Road,Cormac McCarthy,Post-apocalyptic,1,2006
+9780375842207,The Book Thief,Markus Zusak,Historical Fiction,0,2005
+9780399501487,Lord of the Flies,William Golding,Allegory,1,1954
+9780525478812,The Fault in Our Stars,John Green,Young Adult,0,2012
+9780440237686,The Giver,Lois Lowry,Dystopian,1,1993
+9780143035008,Anna Karenina,Leo Tolstoy,Romance,0,1878
+9780141439556,Wuthering Heights,Emily Brontë,Gothic Fiction,1,1847
+9780141321060,The Secret Garden,Frances Hodgson Burnett,Children's Fiction,0,1911
+9780142408762,Little Women,Louisa May Alcott,Classic Fiction,1,1868
+9780142407338,The Outsiders,S.E. Hinton,Young Adult,0,1967
+9780743297332,The Sun Also Rises,Ernest Hemingway,Modernist Fiction,1,1926
+9780385333849,Slaughterhouse-Five,Kurt Vonnegut,Science Fiction,0,1969
+9780316769488,The Catcher in the Rye,J.D. Salinger,Fiction,1,1951
+9780060883287,One Hundred Years of Solitude,Gabriel García Márquez,Magical Realism,0,1967
+9780451530783,The Count of Monte Cristo,Alexandre Dumas,Adventure,1,1844
+9780141441030,The War of the Worlds,H.G. Wells,Science Fiction,0,1898
+9780399501487,The Lord of the Flies,William Golding,Allegory,1,1954
+9780385490818,The Handmaid's Tale,Margaret Atwood,Dystopian,0,1985
+9780441013593,Dune,Frank Herbert,Science Fiction,1,1965
+9780486411095,Dracula,Bram Stoker,Horror,0,1897
+9780451530615,The Time Machine,H.G. Wells,Science Fiction,1,1895
+9780743273565,The Great Gatsby,F. Scott Fitzgerald,Fiction,0,1925
