@@ -74,3 +74,38 @@ void borrowBook(int bookId, Library &library, const string &userName) {
         cout << "Book with ID " << bookId << " not found.\n";
     }
 }
+
+// Return books implementation
+void returnBooks(std::vector<Book> &inventory, std::vector<Transaction> &transactions, const std::string &userName) {
+    int receiptNumber;
+    std::cout << "\nEnter your receipt number: ";
+    std::cin >> receiptNumber;
+
+    int transactionIndex = -1;
+    for (int i = 0; i < transactions.size(); ++i) {
+        if (transactions[i].getTransactionID() == receiptNumber && transactions[i].getUserName() == userName) {
+            transactionIndex = i;
+            break;
+        }
+    }
+
+    if (transactionIndex != -1) {
+        const std::vector<Book> &booksToReturn = transactions[transactionIndex].getBooks();
+        std::cout << "\nBooks being returned:\n";
+
+        for (const Book &returnedBook : booksToReturn) {
+            for (int j = 0; j < inventory.size(); ++j) {
+                if (inventory[j].id == returnedBook.id) {
+                    inventory[j].quantity += returnedBook.quantity;
+                    std::cout << "  - " << returnedBook.title << " (ID: " << returnedBook.id << ", Quantity: " << returnedBook.quantity << ")\n";
+                    break;
+                }
+            }
+        }
+        // Remove the transaction
+        transactions.erase(transactions.begin() + transactionIndex);
+        std::cout << "\nBooks returned successfully.\n";
+    } else {
+        std::cout << "Invalid receipt number or user name. Please try again.\n";
+    }
+}
