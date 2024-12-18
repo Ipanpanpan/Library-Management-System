@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include <iostream> // Make sure iostream is included
+#include <iostream>
 using namespace std;
 class Book {
 public:
@@ -15,8 +15,9 @@ public:
     int year_publish;
 
     Book(string id, string title, string author, string category, bool availability, int year); // Modified constructor
-
     void displayBookInfo() const;
+    bool operator<(const Book& other) const;  // Overloaded < operator
+
 };
 
 vector<Book> importBooksFromCSV(const string& filename);

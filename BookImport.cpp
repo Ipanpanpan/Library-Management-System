@@ -14,9 +14,14 @@ void Book::displayBookInfo() const {
     cout << "ID: " << ID << endl;
     cout << "Title: " << title << endl;
     cout << "Author: " << author << endl;
-    cout << "Category: " << category << endl;         // Display category
-     cout << "Year Published: " << year_publish << endl;
-    cout << "Available: " << (availability ? "Yes" : "No") << endl; // Display availability
+    cout << "Category: " << category << endl;
+    cout << "Year Published: " << year_publish << endl;
+    cout << "Available: " << (availability ? "Yes" : "No") << endl;
+}
+
+// Overloaded < operator for sorting by ID
+bool Book::operator<(const Book& other) const {
+    return ID < other.ID;
 }
 
 // Function to parse CSV and populate the list of Book objects
@@ -80,7 +85,7 @@ vector<Book> importBooksFromCSV(const string& filename) {
         trim(author);
         trim(category);
         trim(availability_str);
-        trim(year_str);
+          trim(year_str);
         // Convert Availability and Year Published to respective types
         bool availability;
         int year_publish;
