@@ -42,6 +42,8 @@
 		<Unit filename="Library.h" />
 		<Unit filename="Transaction.cpp" />
 		<Unit filename="Transaction.h" />
+		<Unit filename="Utility.cpp" />
+		<Unit filename="Utility.h" />
 		<Unit filename="User.cpp" />
 		<Unit filename="User.h" />
 		<Unit filename="main.cpp" />
