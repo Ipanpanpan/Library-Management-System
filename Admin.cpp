@@ -5,6 +5,7 @@
 #include <vector>
 #include "Library.h" // Include the header file
 #include "Admin.h"
+#include "Utility.h"
 
 void Admin::addbook(ID, title, author, category, availability){
     adminobj.add_books(ID,title,author,category,availability);
@@ -20,10 +21,11 @@ void Admin::deletebook(ID){
 
 void Admin::get_all_book(sortedby = NULL){
     if (sorteddby = 1){
-        //id (Merge Sort)
+        mergeSort(adminobj.books, 0, adminobj.books.size()-1);
     }
     else if (sortedby = 2){
         //title (Bubble Sort)
+
     }
     else{
         // print all (function from book import)
