@@ -137,3 +137,15 @@
 	<vector>
 	<functional>
 
+1734515568 source:c:\users\cute4\onedrive\documents\uni 2309\2409\algo project\library-management-system\bookimport.cpp
+	"BookImport.h"
+	<sstream>
+	<fstream>
+	<iostream>
+	<exception>
+
+1734515568 c:\users\cute4\onedrive\documents\uni 2309\2409\algo project\library-management-system\bookimport.h
+	<string>
+	<vector>
+	<iostream>
+

@@ -41,6 +41,7 @@ int main() {
                 cout << "Enter the Book ID to borrow: ";
                 cin >> bookId;
                 borrowBook(bookId, library, userName); // Call the borrowBook function
+                calculateDueDate()// Add due date for the book borrowed
                 break;
             }
             case '3': {
