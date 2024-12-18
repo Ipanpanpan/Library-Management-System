@@ -1,34 +1,39 @@
 // User.cpp
 #include "Library.h"
+#include "User.h"
+#include "Transaction.h"
 #include <iostream>
 #include <algorithm>
 #include <ctime>
 #include <cstdlib>
+#include <iomanip>
+using namespace std;
 
 // Function to generate a random receipt number
 int generateReceiptNumber() {
-    return rand() % 100000 + 10000;
+    receipt_number = rand() % 100000 + 10000
+    return receipt_number;
 }
 
-// Function to calculate the due date (7 days from now)
+// Function to calculate a due date (7 days from the current date)
 std::string calculateDueDate() {
-    time_t now = time(0);
+    time_t now = time(0); // Get current time
     tm *ltm = localtime(&now);
 
-    ltm->tm_mday += 7; // Add 7 days
-    mktime(ltm);       // Normalize the time structure
+    ltm->tm_mday += 7;    // Add 7 days to the current date
+    mktime(ltm);          // Normalize the time structure
 
+    // Format the date as YYYY-MM-DD
     char buffer[11];
     strftime(buffer, sizeof(buffer), "%Y-%m-%d", ltm);
     return std::string(buffer);
 }
 
-// Borrow book function
-void borrowBook(int bookId, Library &library, const string &userName) {
-    vector<Book> &inventory = library.books; // Access the books inventory
-    vector<Transaction> &transactions = library.transactions; // Access transaction history
+void User::borrowBook(int bookId, Library &library) {
+    std::vector<Book> &inventory = library.books; // Access the books inventory
+    std::vector<Transaction> &transactions = library.transactions; // Access transaction history
 
-    // Locate the book using a standard loop
+    // Locate the book in the inventory
     int bookIndex = -1;
     for (int i = 0; i < inventory.size(); ++i) {
         if (inventory[i].id == bookId) {
@@ -38,59 +43,66 @@ void borrowBook(int bookId, Library &library, const string &userName) {
     }
 
     if (bookIndex != -1) { // If book is found
-        Book &book = inventory[bookIndex]; // Direct reference to the found book
+        Book &book = inventory[bookIndex];
         int quantity;
-        cout << "Book found: " << book.title << " (Available: " << book.quantity << ")\n";
-        cout << "Enter the quantity to borrow: ";
-        cin >> quantity;
+        std::cout << "Book found: " << book.title << " (Available: " << book.quantity << ")\n";
+        std::cout << "Enter the quantity to borrow: ";
+        std::cin >> quantity;
 
         if (quantity > 0 && quantity <= book.quantity) {
             book.quantity -= quantity;
 
-            // Generate receipt and transaction
-            int receiptNumber = generateReceiptNumber();
-            string dueDate = calculateDueDate();
+            // Generate receipt number and calculate due date
+            int receipt_number = rand() % 100000 + 10000; // Generate a unique receipt number
+            std::string currentDateTime = Transaction::getCurrentDateTime(); // Get the current date/time
+            std::string dueDate = calculateDueDate(); // Calculate the due date
 
-            Book borrowedBook = {book.id, book.title, quantity};
-            vector<Book> borrowedBooks = {borrowedBook};
-            sort(borrowedBooks.begin(), borrowedBooks.end(), [](const Book &a, const Book &b) { return a.id < b.id; }); // Quick Sort by book ID
+            // Log the borrowing transaction
+            transactions.emplace_back(receiptNumber, "N/A", getUsername(), currentDateTime);
 
-            Transaction transaction(receiptNumber, borrowedBooks, userName, dueDate);
-            transactions.push_back(transaction);
+             // Display the receipt
+            std::cout << "\nTransaction Receipt:\n";
+            std::cout << "Receipt Number: " << receiptNumber << "\n";
+            std::cout << "Borrower: " << getUsername() << "\n";
+            std::cout << "Borrow Date: " << currentDateTime << "\n";
+            std::cout << "Due Date: " << dueDate << "\n";
 
-            // Display receipt
-            cout << "\nTransaction Receipt\n";
-            cout << "Receipt Number: " << receiptNumber << "\n";
-            cout << "Borrower: " << userName << "\n";
-            cout << "Due Date: " << dueDate << "\n";
-            cout << "Books Borrowed:\n";
-            for (const auto &book : borrowedBooks) {
-                cout << "  - " << book.title << " (ID: " << book.id << ", Quantity: " << book.quantity << ")\n";
+            // Sort borrowed books by ID (Quick Sort)
+            std::sort(transactions.begin(), transactions.end(), [](const Transaction &a, const Transaction &b) {
+                return a.getReceiptNumber() < b.getReceiptNumber();
+            });
+
+            std::cout << "Would you like to borrow more books? (y/n): ";
+            char choice;
+            std::cin >> choice;
+            if (choice == 'y' || choice == 'Y') {
+                return; // Prompt for borrowing more books
             }
         } else {
-            cout << "Invalid quantity. Please try again.\n";
+            std::cout << "Invalid quantity. Please try again.\n";
         }
     } else {
-        cout << "Book with ID " << bookId << " not found.\n";
+        std::cout << "Book with ID " << bookId << " not found.\n";
     }
+}
 }
 
 // Return books implementation
-void returnBooks(std::vector<Book> &inventory, std::vector<Transaction> &transactions, const std::string &userName) {
-    int receiptNumber;
+void returnBooks(vector<Book> &inventory, vector<Transaction> &transactions) {
+    int receipt_number;
     std::cout << "\nEnter your receipt number: ";
-    std::cin >> receiptNumber;
+    std::cin >> receipt_number;
 
     int transactionIndex = -1;
     for (int i = 0; i < transactions.size(); ++i) {
-        if (transactions[i].getTransactionID() == receiptNumber && transactions[i].getUserName() == userName) {
+        if (transactions[i].getReceiptNumber() == receiptNumber &&
+            transactions[i].getUserName() == getUserName()) {
             transactionIndex = i;
             break;
         }
     }
 
     if (transactionIndex != -1) {
-        const std::vector<Book> &booksToReturn = transactions[transactionIndex].getBooks();
         std::cout << "\nBooks being returned:\n";
 
         for (const Book &returnedBook : booksToReturn) {
@@ -107,5 +119,38 @@ void returnBooks(std::vector<Book> &inventory, std::vector<Transaction> &transac
         std::cout << "\nBooks returned successfully.\n";
     } else {
         std::cout << "Invalid receipt number or user name. Please try again.\n";
+    }
+}    if (transactionIndex != -1) {
+        // Update inventory and log the return action
+        const std::string returnDate = Transaction::getCurrentDateTime();
+        transactions.emplace_back(-receiptNumber, "N/A", getUsername(), returnDate); // Use negative receipt number for return
+
+        std::cout << "Return successful! Receipt logged.\n";
+    } else {
+        std::cout << "Invalid receipt number or username.\n";
+    }
+}
+
+void User::getTransactionHistory(const std::vector<Transaction>& transactions) const {
+    std::string currentUsername = getUsername();
+    std::cout << "Transaction History for User: " << currentUsername << "\n";
+    std::cout << "-----------------------------------------------\n";
+
+    bool hasTransactions = false;
+
+    for (const auto& transaction : transactions) {
+        if (transaction.getUsername() == currentUsername) {
+            hasTransactions = true;
+
+            // Display transaction details
+            std::cout << "Receipt Number: " << transaction.getReceiptNumber() << "\n";
+            std::cout << "Borrow Date: " << transaction.getBorrowDate() << "\n";
+            std::cout << "Due Date: " << transaction.getDueDate() << "\n";
+            std::cout << "-----------------------------------------------\n";
+        }
+    }
+
+    if (!hasTransactions) {
+        std::cout << "No transactions found for this user.\n";
     }
 }
