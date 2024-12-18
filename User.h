@@ -5,10 +5,17 @@
 #include <string>
 #include <vector>
 
+class User : Account{
+
+
+public:
 // Function to handle book borrowing
-void borrowBook(int bookId, Library &library, const string &userName);
+void borrowBook(int bookId);
 
 // Function to handle book returning
-void returnBooks(vector<Book> &inventory, vector<Transaction> &transactions, const string &userName);
+void returnBooks(vector<Book> &inventory, vector<Transaction> &transactions);
+
+
+};
 
 #endif // USER_H

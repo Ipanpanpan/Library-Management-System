@@ -33,7 +33,7 @@ string Transaction::getCurrentDateTime() const {
 // Function to display transaction details
 void Transaction::displayTransactionInfo() const {
     cout << "Transaction ID: " << transaction_id << endl;
-    cout << "Borrower Username: " << borrower_id << endl;
+    cout << "Borrower Username: " << username << endl;
     cout << "Book ISBN: " << book_id << endl;
     cout << "Transaction Date & Time: " << borrow_date << endl;
     cout << "----------------------------" << endl;

@@ -2,8 +2,8 @@
 #include <algorithm>
 #include <iostream>
 
-Account::Account(const std::string& user, const std::string& pass)
-    : username(user), password(pass) {}
+Account::Account(const std::string& user, const std::string& pass, Library& lib)
+    : username(user), password(pass),library(&lib) {}
 
 std::string Account::getUsername() const { return username; }
 void Account::setUsername(const std::string& user) { username = user; }

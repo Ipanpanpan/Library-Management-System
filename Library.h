@@ -1,11 +1,14 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
+
 #include <vector>
 #include "Account.h"
 #include "BookImport.h"
 #include "Transaction.h"
-#include "Admin.h"
+//#include "Admin.h"
 #include <string>
+
+
 
 class Library {
 public:
@@ -22,7 +25,8 @@ public:
 
 
     void add_accounts(std::string username, std::string password, std::string acc_type);
-    void add_books(std::string ISBN, std::string book_name, std::string author, int quantity, int year_publish);
+    void add_books(std::string ID , std::string title, std::string author, std::string category, bool availability, int year_publish){
+
     void add_transactions(std::string ISBN, std::string username);
 
 
