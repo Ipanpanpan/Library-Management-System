@@ -48,7 +48,6 @@ private:
 
 
 
-
     //Class Attributes
     std::vector<Account*> accounts;
     std::vector<Book> books;

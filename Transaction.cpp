@@ -1,4 +1,5 @@
 #include "Transaction.h"
+#include "Library.h"
 #include <sstream>
 #include <iomanip>
 #include <iostream>
@@ -36,4 +37,8 @@ void Transaction::displayTransactionInfo() const {
     cout << "Book ISBN: " << book_id << endl;
     cout << "Transaction Date & Time: " << borrow_date << endl;
     cout << "----------------------------" << endl;
+}
+
+int Transaction::getTransactionID() const{
+    return transaction_id;
 }
