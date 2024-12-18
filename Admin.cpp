@@ -5,6 +5,8 @@
 #include <vector>
 #include "Library.h" // Include the header file
 #include "Admin.h"
+#include "Utility.h"
+#include "BookImport.h"
 
 void Admin::addbook(ID, title, author, category, availability){
     adminobj.add_books(ID,title,author,category,availability);
@@ -20,13 +22,24 @@ void Admin::deletebook(ID){
 
 void Admin::get_all_book(sortedby = NULL){
     if (sorteddby = 1){
-        //id (Merge Sort)
+        mergeSort(adminobj.books, 0, adminobj.books.size()-1,compare_book_by_id);
+        cout<<"Sorted Books by ID (Using Merge Sort):"<<endl;
+        for(auto e:adminobj.books) cout << e.ID <<" "<<e.title<<" "<<e.author<<" "<<e.category<<" "<<e.availability<<" "<<e.year_publish;
+        cout<<endl;
     }
     else if (sortedby = 2){
-        //title (Bubble Sort)
+        bubbleSort(adminobj.books,compare_book_by_title);
+        cout<<"Sorted Books by ID (Using Merge Sort):"<<endl;
+        cout<<"ID\t"<<"Title\t"<<"Author\t"<<"Category\t"<<"Availability\t"<<"Year Published\t"<<endl;
+        for(auto e:adminobj.books) cout << e.ID <<" "<<e.title<<" "<<e.author<<" "<<e.category<<" "<<e.availability<<" "<<e.year_publish;
+        cout<<endl;
+
     }
     else{
-        // print all (function from book import)
+        cout<<"Show All Current Books:"<<endl;
+        cout<<"ID\t"<<"Title\t"<<"Author\t"<<"Category\t"<<"Availability\t"<<"Year Published\t"<<endl;
+        for(auto e:adminobj.books) cout << e.ID <<" "<<e.title<<" "<<e.author<<" "<<e.category<<" "<<e.availability<<" "<<e.year_publish;
+        cout<<endl;
     }
 }
 
