@@ -16,8 +16,8 @@ private:
 
 public:
     //Constructor
-    Account(const std::string& user, const std::string& pass, const std::string& info);
-    
+    Account(const std::string& user, const std::string& pass);
+
     //Getters and Setter
     std::string getUsername() const;
     void setUsername(const std::string& user);
