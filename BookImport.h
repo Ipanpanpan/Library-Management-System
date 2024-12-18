@@ -3,27 +3,23 @@
 
 #include <string>
 #include <vector>
-#include <iostream>
-
-using namespace std;
 
 class Book {
 public:
-    string ID;
-    string title;
-    string author;
-    string category;
+    std::string ID;
+    std::string title;
+    std::string author;
+    std::string category;
     bool availability;
     int year_publish;
-
-    Book(string id, string title, string author, string category, bool availability, int year);
+    Book();
+    Book(const std::string& id, const std::string& title, const std::string& author, const std::string& category, bool availability, int year);
     void displayBookInfo() const;
-
-
+    std::string getTitle() const { return title; }
 };
 
-vector<Book> importBooksFromCSV(const string& filename);
-bool compare_book_by_id(const Book& l, const Book& r);
-bool compare_book_by_title(const Book& l, const Book& r);
+std::vector<Book> importBooksFromCSV(const std::string& filename);
+bool compareBookByID(const Book& l, const Book& r);
+bool compareBookByTitle(const Book& l, const Book& r);
 
-#endif
+#endif // BOOKIMPORT_H

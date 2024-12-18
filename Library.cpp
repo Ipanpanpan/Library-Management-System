@@ -1,235 +1,188 @@
 #include "Library.h"
-
 #include "BookImport.h"
 #include "Account.h"
+#include "Admin.h"
+#include "User.h"
+#include "Transaction.h"
+#include <fstream>
 #include <sstream>
-#include <exception>
-#include <string>
+#include <stdexcept>
+#include <iostream>
+#include <algorithm>
 
-using namespace std;
 
-
-Library::Library(string book_data_path_, string account_data_path_):
-    book_data_path(book_data_path_), account_data_path(account_data_path_){
-
+Library::Library(const std::string& book_data_path_, const std::string& account_data_path_)
+    : book_data_path(book_data_path_), account_data_path(account_data_path_) {
     books = importBooksFromCSV(book_data_path_);
-    importAccountFromCSV(account_data_path_);
+    importAccountsFromCSV(account_data_path_);
 }
 
-//Getter
-std::vector<Account*> Library::get_accounts() {
+Library::~Library() {
+    for (Account* acc : accounts) {
+        delete acc;
+    }
+}
+
+std::vector<Account*>& Library::getAccounts() {
     return accounts;
 }
 
-std::vector<Book> Library::get_books() const {
+std::vector<Book>& Library::getBooks() {
     return books;
 }
 
-std::vector<Transaction> Library::get_transactions() const {
+std::vector<Transaction>& Library::getTransactions() {
     return transactions;
 }
 
-Account& Library::get_account(std::string username, std::string password) {
-    for (int i = 0; i < accounts.size(); i++){
-        if (accounts[i]->getUsername() == username)
-            return *accounts[i];
+Account* Library::getAccount(const std::string& username, const std::string& password) {
+    for (Account* acc : accounts) {
+        if (acc->getUsername() == username && acc->getPassword() == password) {
+            return acc;
+        }
     }
     return nullptr;
 }
+std::vector<Book> Library::searchBooksByTitle(const std::string& title) {
+    std::vector<Book> foundBooks;
+    for (const auto& book : books) {
+        if (book.title.find(title) != std::string::npos) {
+            foundBooks.push_back(book);
+        }
+    }
+    return foundBooks;
+}
 
+void Library::addAccount(const std::string& username, const std::string& password, const std::string& acc_type) {
+    if (isAccountExist(username)) {
+        throw std::invalid_argument("Username already exists");
+    }
 
-//Adding
-void Library::add_accounts(std::string username, std::string password, std::string acc_type) {
-    if (!is_account_exist(username))
-        throw invalid_argument("username already exist");
-
+    Account* acc = nullptr;
     if (acc_type == "user") {
-        Account* acc = new User(username, password);
+        acc = new User(username, password, this);
+    } else if (acc_type == "admin") {
+        acc = new Admin(username, password, this);
+    } else {
+        throw std::invalid_argument("Invalid account type");
     }
-    else if (acc_type == "admin") {
-        Account* acc = new Admin(username, password);
-    }
-    else
-        throw invalid_argument("Invalid account type");
 
     accounts.push_back(acc);
 }
 
-
-void Library::add_books(std::string ID , std::string title, std::string author, std::string category, bool availability, int year_publish){
-    Book book = Book(ID, title, author, category, availability, year_publish);
-
-    if (books.size() == 0)
-        books.push_back(book);
-
-    else if (books[books.size() - 1] < ID)
-        books.push_back(book);
-
-    else if (books[0] > ID)
-        books.insert(books.begin(), book);
-
-    //search the index to fit book
-    else{
-        int index;
-        int low = 0;
-        int high = books.size()-1;
-        while (!(books[index - 1].ID < ID && ID < books[index].ID)){
-            index = (low + high) / 2;
-            if (books[index].ID > ID)
-                high = index;
-            else if (books[index].ID < ID)
-                low = index;
-            else
-                throw invalid_argument("Book already exist");
-        }
-        books.insert(books.begin() + index, book);
+void Library::addBook(const std::string& ID, const std::string& title, const std::string& author, const std::string& category, bool availability, int year_publish) {
+    if (isBookExist(ID)) {
+        throw std::invalid_argument("Book with this ID already exists");
     }
+
+    Book book(ID, title, author, category, availability, year_publish);
+    books.push_back(book);
+    std::sort(books.begin(), books.end(), compareBookByID);
 }
 
-
-void Library::add_transactions(std::string ID, std::string username) {
-    if (transactions.size() == 0)
-        int id = 1;
-    else
-        int id = transactions[transactions.size() - 1].transaction_id
-
-    Transaction transaction = Transaction(id, ID, username);
+void Library::addTransaction(const std::string& bookId, const std::string& username) {
+    int transactionId = transactions.empty() ? 1 : transactions.back().getTransactionID() + 1;
+    Transaction transaction(transactionId, bookId, username);
     transactions.push_back(transaction);
 }
 
-//Edit
-void Library::edit_book(std::string ID, std::string title = NULL, std::string author = NULL,
-                        int quantity = NULL, int year_publish = NULL){
-
-}
-
-
-//Remove
-void Library::remove_account(string username){
-    for (int i = 0; i < accounts.size(); i++){
-        if (accounts[i].username == username){
-            accounts.erase(accounts.begin() + i);
+void Library::editBook(const std::string& ID, const std::string& title, const std::string& author, const std::string& category, bool availability, int year_publish) {
+    for (auto& book : books) {
+        if (book.ID == ID) {
+            book.title = title;
+            book.author = author;
+            book.category = category;
+            book.availability = availability;
+            book.year_publish = year_publish;
             return;
         }
     }
-    throw invalid_argument("Username not found");
+    throw std::invalid_argument("Book not found");
 }
 
-
-void Library::remove_book(string ID){
-    int low = 0;
-    int high = books.size() -1;
-    int mid;
-    while (low <= high){
-        mid = (low + high) / 2;
-        if (books[mid].ID == ID){
-            books.erase(books.begin() + mid);
+void Library::deleteBook(const std::string& ID) {
+    for (auto it = books.begin(); it != books.end(); ++it) {
+        if (it->ID == ID) {
+            books.erase(it);
             return;
         }
-        else if (books[mid].ID < ID)
-            low = mid;
-        else
-            high = mid;
     }
-    throw invalid_argument("Book not found");
+    throw std::invalid_argument("Book not found");
 }
 
-void Library::remove_transaction_record(int transaction_id) {
-    int low = 0;
-    int high = transactions.size() - 1;
-    int mid;
-    while (low <= high){
-        mid = (low + high) / 2;
-        if (transactions[mid].transaction_id == transaction_id){
-            transactions.erase(transactions.begin() + mid);
+void Library::removeTransaction(int transactionId) {
+    for (auto it = transactions.begin(); it != transactions.end(); ++it) {
+        if (it->getTransactionID() == transactionId) {
+            transactions.erase(it);
             return;
         }
-        else if (transactions[mid].transaction_id < transaction_id)
-            low = mid;
-        else
-            high = mid;
     }
-    throw invalid_argument("Transaction not found");
+    throw std::invalid_argument("Transaction not found");
 }
 
-//Checking
-bool Library::is_book_exist(string ID) const {
-    int low = 0;
-    int high = books.size() -1;
-    int mid;
-    while (low <= high){
-        mid = (low + high) / 2;
-        if (books[mid].ID == ID){
+bool Library::isBookExist(const std::string& ID) const {
+    for (const auto& book : books) {
+        if (book.ID == ID) {
             return true;
         }
-        else if (books[mid].ID < ID)
-            low = mid;
-        else
-            high = mid;
-    }
-    throw false;
-}
-
-bool Library::is_account_exist(string username) const {
-    for (int i = 0; i < accounts.size(); i++){
-        Account ith_account = *accounts[i];
-        if (ith_account.username == username)
-            return true;
     }
     return false;
 }
 
-//Data loader
-void Library::importAccountFromCSV(std::string file_path){
-    fstream file;
-    if (!file.is_open()){
-        throw invalid_argument("Invalid file_path!");
+bool Library::isAccountExist(const std::string& username) const {
+    for (const auto& acc : accounts) {
+        if (acc->getUsername() == username) {
+            return true;
+        }
     }
-    vector<string> row;
-    string line;
-    while(getline(file, line)){
-        row = split(line);
-        string username = row.at(0);
-        string password = row.at(1);
-        string acc_type = row.at(2);
-        add_accounts(username, password, acc_type);
-    }
+    return false;
 }
 
-void Library::importTransactionFromCSV(string file_path) {
-    fstream file;
-    if (!file.is_open()){
-        throw invalid_argument("Invalid file_path!");
-    }
-    vector<string> row;
-    string line;
-    while(getline(file, line)){
-        row = split(line);
-        string transaction_id = row.at(0);
-        string book_id = row.at(1);
-        string borrower_id = row.at(2);
-        add_accounts(username, password, acc_type);
-    }
-}
-
-
-vector<string> Library::split(const string& line, char delimiter) {
-    stringstream ss(line)
-    vector<string> row;
-    string data;
-
-    while(!getline(ss, data, delimiter)){
-        row.push_back(data);
+void Library::importAccountsFromCSV(const std::string& filePath) {
+    std::ifstream file(filePath);
+    if (!file.is_open()) {
+        throw std::runtime_error("Cannot open file: " + filePath);
     }
 
-    return row;
+    std::string line;
+    while (std::getline(file, line)) {
+        std::stringstream ss(line);
+        std::string username, password, acc_type;
+        if (std::getline(ss, username, ',') &&
+            std::getline(ss, password, ',') &&
+            std::getline(ss, acc_type, ',')) {
+            try {
+                addAccount(username, password, acc_type);
+            } catch (const std::invalid_argument& e) {
+                std::cerr << "Error adding account: " << e.what() << std::endl;
+            }
+        }
+    }
+
+    file.close();
 }
 
-std::vector<Account*> Library::get_accounts() const{
-    return accounts
+void Library::importTransactionsFromCSV(const std::string& filePath) {
+    std::ifstream file(filePath);
+    if (!file.is_open()) {
+        throw std::runtime_error("Cannot open file: " + filePath);
+    }
+
+    std::string line;
+    while (std::getline(file, line)) {
+        std::stringstream ss(line);
+        std::string transactionId_str, bookId, borrowerId;
+        if (std::getline(ss, transactionId_str, ',') &&
+            std::getline(ss, bookId, ',') &&
+            std::getline(ss, borrowerId, ',')) {
+            try {
+                int transactionId = std::stoi(transactionId_str);
+                addTransaction(bookId, borrowerId);
+            } catch (const std::invalid_argument& e) {
+                std::cerr << "Error adding transaction: " << e.what() << std::endl;
+            }
+        }
+    }
+
+    file.close();
 }
-
-
-
-
-

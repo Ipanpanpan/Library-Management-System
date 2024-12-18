@@ -1,21 +1,18 @@
 #ifndef USER_H
 #define USER_H
 
+#include "Account.h"
 #include "Library.h"
 #include <string>
-#include <vector>
 
-class User : Account{
-
-
+class User : public Account {
+private:
+    Library* library;
 public:
-// Function to handle book borrowing
-void borrowBook(int bookId);
-
-// Function to handle book returning
-void returnBooks(vector<Book> &inventory, vector<Transaction> &transactions);
-
-
+    User(const std::string& user, const std::string& pass, Library* lib);
+    void searchBook(const std::string& title) override;
+    void borrowBook(const std::string& bookId, int quantity);
+    void returnBook(int transactionId);
 };
 
 #endif // USER_H

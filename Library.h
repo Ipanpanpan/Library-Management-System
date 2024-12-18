@@ -2,65 +2,47 @@
 #define LIBRARY_H
 
 #include <vector>
-#include "Account.h"
+#include <string>
 #include "BookImport.h"
 #include "Transaction.h"
-//#include "Admin.h"
-#include <string>
 
-
+// Forward declarations
+class Account;
+class Admin;
+class User;
 
 class Library {
 public:
-    friend class Admin;
+    Library(const std::string& book_data_path_ = "books_info.csv", const std::string& account_data_path_ = "account_data.csv");
+    ~Library();
 
-    //Constructor
-    Library(std::string book_data_path_ = "books_info.csv", std::string account_data_path_ = "account_data.csv");
+    std::vector<Account*>& getAccounts();
+    std::vector<Book>& getBooks();
+    std::vector<Transaction>& getTransactions();
+    Account* getAccount(const std::string& username, const std::string& password);
 
-    //Getter
-    std::vector<Account*> get_accounts();
-    std::vector<Book> get_books() const;
-    std::vector<Transaction> get_transactions() const;
-    Account& get_account(std::string username, std::string password);
+    void addAccount(const std::string& username, const std::string& password, const std::string& acc_type);
+    void addBook(const std::string& ID, const std::string& title, const std::string& author, const std::string& category, bool availability, int year_publish);
+    void addTransaction(const std::string& bookId, const std::string& username);
+    std::vector<Book> searchBooksByTitle(const std::string& title);
 
+    void editBook(const std::string& ID, const std::string& title, const std::string& author, const std::string& category, bool availability, int year_publish);
+    void deleteBook(const std::string& ID);
+    void removeTransaction(int transactionId);
 
-    void add_accounts(std::string username, std::string password, std::string acc_type);
-    void add_books(std::string ID , std::string title, std::string author, std::string category, bool availability, int year_publish){
+    bool isBookExist(const std::string& ID) const;
+    bool isAccountExist(const std::string& username) const;
 
-    void add_transactions(std::string ISBN, std::string username);
-
-
-
+    void importAccountsFromCSV(const std::string& filePath);
+    void importTransactionsFromCSV(const std::string& filePath);
 
 private:
-    //Private Function
-    void remove_account(std::string username);
-    void remove_book(std::string ISBN);
-    void remove_transaction_record(int transaction_id);
-
-    void edit_book(std::string ISBN, std::string book_name = NULL, std::string author = NULL, int quantity = NULL, int year_publish = NULL);
-
-    //Checking
-    bool is_book_exist(std::string ISBN) const;
-    bool is_account_exist(std::string username) const;
-
-
-    //File Import
-    void importAccountFromCSV(std::string file_path);
-    void importTransactionFromCSV(std::string file_path);
-    vector<string> split(const std::string& line, char delimiter = ',');
-
-
-
-
-    //Class Attributes
     std::vector<Account*> accounts;
     std::vector<Book> books;
     std::vector<Transaction> transactions;
-    //data path
+
     std::string book_data_path;
     std::string account_data_path;
-
 };
 
 #endif // LIBRARY_H

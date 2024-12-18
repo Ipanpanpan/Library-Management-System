@@ -1,79 +1,56 @@
 #include "BookImport.h"
+#include <fstream>
 #include <sstream>
-#include <fstream>        // For file operations
-#include <iostream>       // For display purposes
-#include <exception>
+#include <iostream>
+#include <stdexcept>
 
-// Constructor implementation
-Book::Book(string id, string title, string author, string category, bool availability, int year)
-    : ID(id), title(title), author(author), category(category), availability(availability), year_publish(year) {
-}
+Book::Book()
+    : ID("-99"), title("default"), author("ivan"), category("default"), availability(false), year_publish(1000) {}
 
-// Method to display book details
+Book::Book(const std::string& id, const std::string& title, const std::string& author, const std::string& category, bool availability, int year)
+    : ID(id), title(title), author(author), category(category), availability(availability), year_publish(year) {}
+
 void Book::displayBookInfo() const {
-    cout << "ID: " << ID << endl;
-    cout << "Title: " << title << endl;
-    cout << "Author: " << author << endl;
-    cout << "Category: " << category << endl;
-    cout << "Year Published: " << year_publish << endl;
-    cout << "Available: " << (availability ? "Yes" : "No") << endl;
+    std::cout << "ID: " << ID << std::endl;
+    std::cout << "Title: " << title << std::endl;
+    std::cout << "Author: " << author << std::endl;
+    std::cout << "Category: " << category << std::endl;
+    std::cout << "Year Published: " << year_publish << std::endl;
+    std::cout << "Available: " << (availability ? "Yes" : "No") << std::endl;
 }
 
-
-// Function to parse CSV and populate the list of Book objects
-vector<Book> importBooksFromCSV(const string& filename) {
-    vector<Book> books;
-    ifstream file(filename);
+std::vector<Book> importBooksFromCSV(const std::string& filename) {
+    std::vector<Book> books;
+    std::ifstream file(filename);
     if (!file.is_open()) {
-        throw invalid_argument("Cannot open file: " + filename);
+        throw std::runtime_error("Cannot open file: " + filename);
     }
 
-    string line;
+    std::string line;
     bool isFirstLine = true;
-
-    while (getline(file, line)) {
+    while (std::getline(file, line)) {
         if (isFirstLine) {
-            isFirstLine = false; // Skip the header line
+            isFirstLine = false;
             continue;
         }
 
-        if (line.empty()) continue; // Skip empty lines
-        stringstream ss(line);
-        string id, title, author, category, availability_str, year_str;
+        if (line.empty()) continue;
+        std::stringstream ss(line);
+        std::string id, title, author, category, availability_str, year_str;
 
-        // CSV format: ID,Title,Author,Category,Availability,Year Published
-        if (!getline(ss, id, ',')) {
-            cerr << "Warning: Missing ID in line: " << line << endl;
+        if (!std::getline(ss, id, ',') ||
+            !std::getline(ss, title, ',') ||
+            !std::getline(ss, author, ',') ||
+            !std::getline(ss, category, ',') ||
+            !std::getline(ss, availability_str, ',') ||
+            !std::getline(ss, year_str, ',')) {
+            std::cerr << "Warning: Incomplete data in line: " << line << std::endl;
             continue;
         }
-        if (!getline(ss, title, ',')) {
-            cerr << "Warning: Missing Title in line: " << line << endl;
-            continue;
-        }
-        if (!getline(ss, author, ',')) {
-            cerr << "Warning: Missing Author in line: " << line << endl;
-            continue;
-        }
-        if (!getline(ss, category, ',')) {
-            cerr << "Warning: Missing Category in line: " << line << endl;
-            continue;
-        }
-        if (!getline(ss, availability_str, ',')) {
-             cerr << "Warning: Missing Availability in line: " << line << endl;
-            continue;
-        }
-           if (!getline(ss, year_str, ',')) {
-            cerr << "Warning: Missing Year Published in line: " << line << endl;
-            continue;
-        }
-        // Trim whitespace from extracted strings (optional but recommended)
-        auto trim = [](string& s) {
-            size_t start = s.find_first_not_of(" \t\r\n");
-            size_t end = s.find_last_not_of(" \t\r\n");
-            if (start == string::npos || end == string::npos)
-                s = "";
-            else
-                s = s.substr(start, end - start + 1);
+
+        auto trim = [](std::string& s) {
+            s.erase(0, s.find_first_not_of(" \t\r\n"));
+            s.erase(s.find_last_not_of(" \t\r\n") + 1);
         };
 
         trim(id);
@@ -81,20 +58,18 @@ vector<Book> importBooksFromCSV(const string& filename) {
         trim(author);
         trim(category);
         trim(availability_str);
-          trim(year_str);
-        // Convert Availability and Year Published to respective types
+        trim(year_str);
+
         bool availability;
         int year_publish;
         try {
-           availability = (availability_str == "1"); // Convert "1" to true, "0" to false
-           year_publish = stoi(year_str);
-        }
-         catch (const invalid_argument& e) {
-            cerr << "Warning: Invalid number or format in line: " << line << endl;
-            continue; // Skip invalid lines
+            availability = (availability_str == "1");
+            year_publish = std::stoi(year_str);
+        } catch (const std::invalid_argument& e) {
+            std::cerr << "Warning: Invalid format in line: " << line << std::endl;
+            continue;
         }
 
-        // Create and add the Book object
         books.emplace_back(id, title, author, category, availability, year_publish);
     }
 
@@ -102,12 +77,10 @@ vector<Book> importBooksFromCSV(const string& filename) {
     return books;
 }
 
-//Ini buat compare_book_by_id ya bel yak ada
-bool compare_book_by_id(const Book& l, const Book& r){
+bool compareBookByID(const Book& l, const Book& r) {
     return l.ID < r.ID;
 }
 
-//Ini buat compare_book_by_title ya bel yak ada
-bool compare_book_by_title(const Book& l, const Book& r){
+bool compareBookByTitle(const Book& l, const Book& r) {
     return l.title < r.title;
 }

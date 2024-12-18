@@ -2,26 +2,24 @@
 #define TRANSACTION_H
 
 #include <string>
-#include <ctime>
-
-using namespace std;
+#include <vector>
+#include "BookImport.h"
 
 class Transaction {
 private:
-    int transaction_id;  // Unique transaction ID that includes the borrow date & time
-    string isbn;         // ID of the borrowed book
-    string username;     // User ID of the borrower
-    string borrow_date;  // Date and time of the transaction
+    int transaction_id;
+    std::string book_id;
+    std::string username;
+    std::string borrow_date;
+    std::vector<Book> books;
 
 public:
-    // Constructor to initialize a transaction
-    Transaction(int trans_id, string isbn, string username);
-
-    // Function to get the current date and time as a string (YYYY-MM-DD HH:MM:SS)
-    string getCurrentDateTime() const;
-
-    // Function to display transaction details
+    Transaction(int trans_id, const std::string& book_id, const std::string& username);
+    std::string getCurrentDateTime() const;
     void displayTransactionInfo() const;
+    int getTransactionID() const { return transaction_id; }
+    std::string getUserName() const { return username; }
+    const std::vector<Book>& getBooks() const { return books; }
 };
 
-#endif
+#endif // TRANSACTION_H

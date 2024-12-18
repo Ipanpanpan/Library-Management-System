@@ -1,22 +1,21 @@
 #ifndef ADMIN_H
 #define ADMIN_H
+
+#include "Account.h"
 #include "Library.h"
+#include <string>
 
-
-
-class Admin : Account{
-private:
+class Admin : public Account {
 public:
+    Admin(const std::string& user, const std::string& pass, Library* lib);
 
-    Admin(const std::string& user, const std::string& pass, Library& lib);
-
-    void addbook(string ID, string title, string author, string category, bool availability, int yearPublish);
-    void searchbook(string ID);
-    void editbook(string ID, string title, string author, string category, bool availability, int yearPublish);
-    void deletebook(string ID);
-    void get_all_book (int sortedby = NULL);
-    void get_all_transaction();
-    void search_transaction_receipt(string user_id);
+    void addBook(const std::string& ID, const std::string& title, const std::string& author, const std::string& category, bool availability, int yearPublish);
+    void searchBook(const std::string& title) override;
+    void editBook(const std::string& ID, const std::string& title, const std::string& author, const std::string& category, bool availability, int yearPublish);
+    void deleteBook(const std::string& ID);
+    void getAllBooks(int sortedby = 0);
+    void getAllTransactions();
+    void searchTransactionReceipt(const std::string& user_id);
 };
 
-#endif // ACCOUNT_H
+#endif // ADMIN_H
