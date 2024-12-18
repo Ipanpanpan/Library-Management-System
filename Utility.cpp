@@ -65,3 +65,25 @@ void mergeSort(vector<T>& arr, int left, int right, function<bool(T, T)> comp) {
         merge(arr, left, mid, right, comp);
     }
 }
+
+// Bubble Sort with custom comparator
+template <typename T>
+void bubbleSort(vector<T>& arr, function<bool(T, T)> comp) {
+    int n = arr.size();
+    bool swapped;
+
+    for (int i = 0; i < n - 1; ++i) {
+        swapped = false;
+
+        for (int j = 0; j < n - i - 1; ++j) {
+            if (!comp(arr[j], arr[j + 1])) { // Use custom comparator
+                swap(arr[j], arr[j + 1]);
+                swapped = true;
+            }
+        }
+
+        // If no two elements were swapped, the array is sorted
+        if (!swapped) break;
+    }
+}
+
